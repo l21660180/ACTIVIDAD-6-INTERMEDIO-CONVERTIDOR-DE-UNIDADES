@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Definimos el tipo de documento y el idioma del contenido -->
+<head>
+    <meta charset="UTF-8"> <!-- Definimos la codificación de caracteres en UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hacemos que el contenido sea responsive en dispositivos móviles -->
+    <title>Convertidor de Unidades</title> <!-- Título de la página -->
+    <!-- Importamos la fuente Poppins de Google Fonts para un diseño moderno -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos básicos del cuerpo de la página */
+        body {
+            font-family: 'Poppins', sans-serif; /* Usamos la fuente Poppins */
+            background-color: #00bfa5; /* Fondo con el mismo color que el botón */
+            display: flex; /* Flexbox para centrar el contenido */
+            justify-content: center; /* Centrar horizontalmente */
+            align-items: center; /* Centrar verticalmente */
+            height: 100vh; /* Altura de la página completa */
+            margin: 0; /* Elimina el margen por defecto del body */
+            box-sizing: border-box; /* Incluye el padding y border en el tamaño total de los elementos */
+        }
+        /* Estilo del contenedor principal */
+        .container {
+            background-color: #ffffff; /* Fondo blanco para el contenedor */
+            padding: 20px; /* Ajusta el padding para mayor uniformidad */
+            border-radius: 12px; /* Bordes redondeados */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra suave alrededor del contenedor */
+            max-width: 420px; /* Ancho máximo del contenedor */
+            width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+            box-sizing: border-box; /* Incluye el padding en el tamaño total */
+            text-align: center; /* Centrar el texto dentro del contenedor */
+            margin: 0 10px; /* Añadir margen para evitar que se salga en pantallas pequeñas */
+        }
+        /* Estilo del título principal */
+        h1 {
+            color: #333; /* Color del texto */
+            font-size: 24px; /* Tamaño de fuente */
+            margin-bottom: 20px; /* Margen inferior para separar del siguiente elemento */
+            font-weight: 600; /* Negrita */
+        }
+        /* Estilo de los campos de entrada y selectores */
+        input, select {
+            padding: 12px; /* Espaciado interno */
+            margin: 10px 0; /* Margen superior e inferior */
+            width: calc(100% - 24px); /* Ocupa el 100% menos el padding para evitar desbordamiento */
+            border: 2px solid #ddd; /* Borde gris claro */
+            border-radius: 8px; /* Bordes redondeados */
+            transition: border-color 0.3s ease, background-color 0.3s ease; /* Transición suave en el borde y fondo */
+            box-sizing: border-box; /* Incluir el padding y borde en el tamaño total */
+        }
+        /* Efecto cuando el campo o selector está enfocado (activo) */
+        input:focus, select:focus {
+            border-color: #00bcd4; /* Cambia el color del borde a azul */
+            background-color: #e0f7fa; /* Cambia el fondo a azul claro */
+        }
+        /* Placeholder (texto sugerido en el input) */
+        input::placeholder {
+            color: #999; /* Color del texto del placeholder */
+        }
+        /* Estilo de los selectores */
+        select {
+            background-color: #ffffff; /* Fondo blanco para los selectores */
+            cursor: pointer; /* Muestra un cursor de mano en los selectores */
+        }
+        /* Estilo para las etiquetas (label) */
+        .label {
+            text-align: left; /* Alinear el texto a la izquierda */
+            margin-top: 10px; /* Margen superior */
+            color: #00796b; /* Color de texto verde */
+            font-weight: 500; /* Peso de la fuente medio */
+        }
+        /* Estilo del cuadro de resultado */
+        .result {
+            margin-top: 20px; /* Margen superior */
+            padding: 15px; /* Espaciado interno */
+            background-color: #f1f8e9; /* Fondo verde claro */
+            border: 2px solid #c5e1a5; /* Borde verde suave */
+            border-radius: 10px; /* Bordes redondeados */
+            font-weight: bold; /* Texto en negrita */
+            color: #33691e; /* Color del texto verde oscuro */
+            font-size: 18px; /* Tamaño del texto */
+        }
+        /* Estilo para el número del resultado */
+        .result span {
+            color: #388e3c; /* Color del número en verde oscuro */
+        }
+        /* Estilo del botón */
+        button {
+            background-color: #00bfa5; /* Fondo verde azulado */
+            color: white; /* Texto en blanco */
+            padding: 12px; /* Espaciado interno */
+            margin-top: 15px; /* Margen superior */
+            width: 100%; /* Ocupa el 100% del ancho disponible */
+            border: none; /* Sin borde */
+            border-radius: 8px; /* Bordes redondeados */
+            cursor: pointer; /* Cursor de mano */
+            font-size: 16px; /* Tamaño del texto */
+            font-weight: 600; /* Texto en negrita */
+            transition: background-color 0.3s ease; /* Transición suave en el fondo */
+            box-sizing: border-box; /* Incluir el padding en el tamaño total */
+        }
+        /* Efecto hover en el botón */
+        button:hover {
+            background-color: #00897b; /* Cambia el color del botón cuando se pasa el mouse */
+        }
+        /* Estilo del ícono de carga */
+        .icon {
+            display: none; /* Ocultar el ícono inicialmente */
+            font-size: 18px; /* Tamaño del ícono */
+            color: #00bfa5; /* Color del ícono */
+            margin-left: 10px; /* Margen izquierdo */
+            vertical-align: middle; /* Alineación vertical */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Convertidor de Unidades</h1> <!-- Título principal de la página -->
+    
+    <!-- Etiqueta e input para ingresar el valor -->
+    <label class="label" for="inputValue">Ingresa un valor:</label>
+    <input type="number" id="inputValue" placeholder="Escribe el valor a convertir" min="0" step="any"> <!-- Input de valor a convertir -->
+
+    <!-- Etiqueta y selector para elegir la unidad de entrada -->
+    <label class="label" for="inputUnit">Unidad de entrada:</label>
+    <select id="inputUnit">
+        <option value="meters">Metros</option> <!-- Opción: Metros -->
+        <option value="kilometers">Kilómetros</option> <!-- Opción: Kilómetros -->
+        <option value="miles">Millas</option> <!-- Opción: Millas -->
+    </select>
+
+    <!-- Etiqueta y selector para elegir la unidad de salida -->
+    <label class="label" for="outputUnit">Unidad de salida:</label>
+    <select id="outputUnit">
+        <option value="meters">Metros</option> <!-- Opción: Metros -->
+        <option value="kilometers">Kilómetros</option> <!-- Opción: Kilómetros -->
+        <option value="miles">Millas</option> <!-- Opción: Millas -->
+    </select>
+
+    <!-- Cuadro donde se mostrará el resultado -->
+    <div class="result" id="result">Resultado: <span>0</span></div>
+    
+    <!-- Botón para resetear los valores -->
+    <button id="resetButton">Resetear</button>
+    <!-- Ícono de carga que aparecerá durante la conversión -->
+    <span id="loadingIcon" class="icon">⏳</span>
+</div>
+
+<script>
+    // Capturamos los elementos de la página
+    const inputValue = document.getElementById('inputValue');
+    const inputUnit = document.getElementById('inputUnit');
+    const outputUnit = document.getElementById('outputUnit');
+    const result = document.getElementById('result');
+    const resetButton = document.getElementById('resetButton');
+    const loadingIcon = document.getElementById('loadingIcon');
+
+    // Función que realiza la conversión
+    function convert() {
+        loadingIcon.style.display = 'inline'; // Mostrar el ícono de carga
+        
+        const value = parseFloat(inputValue.value); // Obtener el valor ingresado
+        const input = inputUnit.value; // Obtener la unidad de entrada seleccionada
+        const output = outputUnit.value; // Obtener la unidad de salida seleccionada
+
+        // Validar si el valor ingresado es un número
+        if (isNaN(value)) {
+            result.innerHTML = 'Por favor ingresa un número válido.'; // Mensaje de error si no es un número
+            loadingIcon.style.display = 'none'; // Ocultar ícono de carga si hay error
+            return;
+        }
+
+        let meters;
+
+        // Convertir la unidad de entrada a metros
+        if (input === 'meters') meters = value;
+        else if (input === 'kilometers') meters = value * 1000;
+        else if (input === 'miles') meters = value * 1609.34;
+
+        // Convertir de metros a la unidad de salida
+        let outputValue;
+        if (output === 'meters') outputValue = meters;
+        else if (output === 'kilometers') outputValue = meters / 1000;
+        else if (output === 'miles') outputValue = meters / 1609.34;
+
+        // Mostrar el resultado con dos decimales
+        result.innerHTML = `Resultado: <span>${outputValue.toFixed(2)}</span>`;
+        loadingIcon.style.display = 'none'; // Ocultar el ícono de carga al completar
+    }
+
+    // Asignamos eventos de escucha para que la conversión se realice en tiempo real
+    inputValue.addEventListener('input', convert);
+    inputUnit.addEventListener('change', convert);
+    outputUnit.addEventListener('change', convert);
+
+    // Evento para el botón de resetear
+    resetButton.addEventListener('click', () => {
+        inputValue.value = ''; // Limpiar el valor del input
+        result.innerHTML = 'Resultado: <span>0</span>'; // Restablecer el resultado a 0
+    });
+</script>
+
+</body>
+</html>
